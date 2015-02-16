@@ -1,0 +1,68 @@
+<html>
+
+<head>
+
+<!-- Include Google Maps API (Google Maps API v3 已不需使用 API Key) -->
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<!-- Require jQuery v1.7.0 or newer -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="jquery.tinyMap-3.1.6.js"></script>
+
+<script type='text/javascript'>
+
+
+//label CSS style
+//.label{font-size:12px;background:rgba(22,22,22,0.6);color:#fff;padding:.25em}
+$('#map').tinyMap({
+marker: [
+{
+addr: '110台灣台北市信義區逸仙路28號',
+text: '110台灣台北市信義區逸仙路28號',
+label: '請點我',
+css: 'labels',
+// 自訂 marker click 事件
+event: function (e) {
+alert(e.latLng);
+},
+// 或是下列方式綁定多種事件
+event: {
+'click' : function (e) {
+alert('緯度: ' + e.latLng.lat() + ', 經度: ' + e.latLng.lng());
+},
+'mouseover': {
+'func': function (e) {
+alert('我只能執行一次');
+},
+'once': true|false // 僅執行一次
+}
+},
+// 自訂圖示
+icon: {
+url: 'big.png',
+size: [128, 128]
+},
+// 動畫效果
+animation: 'DROP|BOUNCE'
+},
+...
+]
+});
+//若需顯示大量 marker ，建議以陣列方式傳入經緯座標，避免無法一次全部顯示。
+$('#map').tinyMap({
+marker: [
+{addr: ['25.037467', '121.564077'], text: '台北市政府'},
+{addr: ['25.100295', '121.549494'], text: '國立故宮博物院'}
+]
+});
+
+</script>
+
+</head>
+
+<body>
+
+<div id="map">abc</div>
+
+</body>
+
+</html>

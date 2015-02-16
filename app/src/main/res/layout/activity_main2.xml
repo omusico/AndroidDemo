@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <WebView android:id="@+id/webview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        android:id="@+id/btn_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:src="@drawable/gur"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_disaster"
+        android:src="@drawable/fire"
+        android:layout_below="@+id/btn_search"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="52dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_injured"
+        android:src="@drawable/injured"
+        android:layout_below="@+id/btn_disaster"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/btn_disaster" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_ambulance"
+        android:src="@drawable/ambulance"
+        android:layout_below="@+id/bt_injured"
+        android:layout_alignStart="@+id/btn_disaster" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_hospital"
+        android:src="@drawable/hospital"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/btn_search"
+        android:layout_alignStart="@+id/btn_disaster" />
+
+
+</RelativeLayout>

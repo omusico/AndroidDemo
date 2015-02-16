@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Map</title>
+    <meta name="viewport" conpatient="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+        html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+        }
+        #wrap {width:900px;margin:0 auto;overflow:hidden;}
+        #sideColumn {width:300px;float:left;}
+        #mainColumn {float:left;width:600px;}
+
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script>
+
+var geocoder;
+var map;
+var infowindow = new google.maps.InfoWindow();
+var marker;
+
+var firemarks = [];
+var patientmarks = [];
+var ambulancemarks = [];
+
+var ctaLayer;
+
+var epzLayer;
+var epz3Layer;
+var epz5Layer;
+var epz8_1Layer;
+var epz8_2Layer;
+var epz16_1Layer;
+var epz16_2Layer;
+
+
+function initialize() {
+  geocoder = new google.maps.Geocoder();
+  var mapOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(-34.397, 150.644),
+    mapTypeId: 'roadmap'
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+}
+
+function placeMarker(position, image, map, array) {
+  var marker = new google.maps.Marker({
+    position: position,
+    map: map,
+    icon: image
+  });
+  array.push(marker);
+  map.panTo(position);
+  map.setZoom(15);
+}
+
+function codeLatLng() {
+  var input = document.getElementById('latlng').value;
+  var latlngStr = input.split(',', 2);
+  var lat = parseFloat(latlngStr[0]);
+  var lng = parseFloat(latlngStr[1]);
+  var latlng = new google.maps.LatLng(lat, lng);
+
+  map.panTo(latlng);
+  geocoder.geocode({'latLng': latlng}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results[1]) {
+        map.setZoom(11);
+        marker = new google.maps.Marker({
+            position: latlng,
+            map: map
+        });
+        infowindow.setConpatient(results[1].formatted_address);
+        infowindow.open(map, marker);
+      } else {
+        alert('No results found');
+      }
+    } else {
+      alert('Geocoder failed due to: ' + status);
+    }
+  }
+
+  );
+}
+
+function showfire() {
+    addfire();
+    setAllMap(map,firemarks);
+}
+
+function disshowfire() {
+    setAllMap(null,firemarks);
+}
+
+function showpatient() {
+    addpatient();
+    setAllMap(map,patientmarks);
+}
+
+function disshowpatient() {
+    setAllMap(null,patientmarks);
+}
+
+function showambulance() {
+    addambulance();
+    setAllMap(map,ambulancemarks);
+}
+
+function disshowambulance() {
+    setAllMap(null,ambulancemarks);
+}
+
+function showhospital() {
+    ctaLayer = new google.maps.KmlLayer({
+       url: 'http://ogc.tpgos.taipei.gov.tw/tp98_6_demo/kml/臺北市公私立醫療院所.kml'
+     });
+     ctaLayer.setMap(map);
+}
+
+function disshowhospital() {
+    ctaLayer.setMap(null);
+}
+
+function showepz3() {
+    epz3Layer = new google.maps.KmlLayer({
+       driveFileId: "0Bzr9G1PMaYcwaGxhempHeEoyZUk"
+     });
+     epz3Layer.setMap(map);
+}
+
+function disshowepz3() {
+    epz3Layer.setMap(null);
+}
+
+function showepz5() {
+    epz5Layer = new google.maps.KmlLayer({
+      driveFileId: "0Bzr9G1PMaYcwNGhtVkdsNlJ2MU0"
+    });
+     epz5Layer.setMap(map);
+}
+
+function disshowepz5() {
+    epz5Layer.setMap(null);
+}
+
+function showepz8_1() {
+    epz8_1Layer = new google.maps.KmlLayer({
+      driveFileId: "0Bzr9G1PMaYcwSzhrTGpIY0lYeXc"
+    });
+     epz8_1Layer.setMap(map);
+}
+
+function disshowepz8_1() {
+    epz8_1Layer.setMap(null);
+}
+
+function showepz8_2() {
+    epz8_2Layer  = new google.maps.KmlLayer({
+      driveFileId: "0Bzr9G1PMaYcwaE0tZHRDYUFyZFE"
+    });
+     epz8_2Layer.setMap(map);
+}
+
+function disshowepz8_2() {
+    epz8_2Layer.setMap(null);
+}
+
+
+function showepz16_1() {
+    epz16_1Layer = new google.maps.KmlLayer({
+      driveFileId: "0Bzr9G1PMaYcwQS01em5sVjN0Smc"
+    });
+     epz16_1Layer.setMap(map);
+}
+
+function disshowepz16_1() {
+    epz16_1Layer.setMap(null);
+}
+
+
+function showepz16_2() {
+    epz16_2Layer = new google.maps.KmlLayer({
+      driveFileId: "0Bzr9G1PMaYcwaDVocFE5WmZzV3c"
+    });
+     epz16_2Layer.setMap(map);
+}
+
+function disshowepz16_2() {
+    epz16_2Layer.setMap(null);
+}
+
+
+function showepz() {
+    epzLayer =new google.maps.KmlLayer({
+      driveFileId: "0Bzr9G1PMaYcwS29PcHUwbkRfcGM"
+    });
+     epzLayer.setMap(map);
+}
+
+function disshowepz() {
+    epzLayer.setMap(null);
+}
+
+
+function goto(address) {
+    geocoder.geocode({ 'address': address }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setZoom(11);
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+        } else {
+            alert("Geocode was not successful for the following reason: " + status);
+        }
+    });
+}
+
+function setAllMap(map,markers) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+
+function addfire() {
+    placeMarker(new google.maps.LatLng(22.605097, 120.3247118),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6116735,120.32621380000002),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6051961,120.3270292),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6121885,120.322566),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6075533,120.31889680000002),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6217952,120.32844539999999),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6227657,120.33097740000001),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6080089,120.3183174),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6078604,120.3177059),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.6213198,120.3269112),'fire.png',map,firemarks);
+    placeMarker(new google.maps.LatLng(22.606325200000004,120.31584980000001),'fire.png',map,firemarks);
+}
+
+
+function addpatient() {
+    placeMarker(new google.maps.LatLng(22.615853,120.32447580000002),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.6016006,120.32470110000001),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.6104157,120.3228021),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.611109,120.3178346),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.6214981,120.32415390000001),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.6217952,120.32844539999999),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.6227657,120.33097740000001),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.6047801,120.30758860000002),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.625063300000004,120.3183603),'patient.png',map,patientmarks);
+    placeMarker(new google.maps.LatLng(22.6024029,120.31213760000001),'patient.png',map,patientmarks);
+}
+
+
+function addambulance() {
+    placeMarker(new google.maps.LatLng(22.6026803,120.31140799999999),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.601254,120.3123951),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.6073553,120.3178883),'patient.ambulance',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.6041066,120.32741549999999),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.612188500000002,120.32835960000001),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.616308599999996,120.32827379999999),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.6250236,120.333252),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.620903800000004,120.3211069),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.6124856999999971,120.3220296),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.6085438,120.3162146),'ambulance.png',map,ambulancemarks);
+    placeMarker(new google.maps.LatLng(22.6026803,120.31140799999999),'ambulance.png',map,ambulancemarks);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+
+</head>
+<body>
+<div id="wrap">
+    <div id="sideColumn">
+        <div id="panel">
+            <input type="button" value="test1" onclick="showepz16_2()">
+        </div>
+        <div id="pane2">
+            <input type="button" value="test2" onclick="disshowepz16_2()">
+        </div>
+    </div>
+</div>
+<br>
+<div id="map-canvas"></div>
+</body>
+</html>

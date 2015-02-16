@@ -1,0 +1,410 @@
+<html>
+<head>
+    <title>Simple Map</title>
+    <meta name="viewport" conpatient="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+        html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+        }
+        #wrap {width:900px;margin:0 auto;overflow:hidden;}
+        #sideColumn {width:300px;float:left;}
+        #mainColumn {float:left;width:600px;}
+        .contextmenu{
+        visibility:hidden;
+        background:#ffffff;
+        border:1px solid #8888FF;
+        z-index: 10;
+        position: relative;
+        width: 140px;
+        }
+        .contextmenu div{
+        padding-left: 5px
+        }
+
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script>
+
+var geocoder;
+var map;
+var infowindow = new google.maps.InfoWindow();
+var marker;
+
+var disastermarks = [];
+var injuredmarks = [];
+var ambulancemarks = [];
+
+var contextmenu;
+
+
+
+function initialize() {
+  geocoder = new google.maps.Geocoder();
+  var mapOptions = {
+    zoom: 15,
+    center: new google.maps.LatLng(25.058855225256444,121.5743637084961),
+    mapTypeId: 'roadmap'
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  google.maps.event.addListener(map, "click",function(event){
+        showContextMenu(event.latLng);
+        }
+    );
+
+   contextmenu = document.createElement("div");
+   contextmenu.className = 'contextmenu';
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+function showAmbulance(flag) {
+    console.log(flag);
+	if(flag){
+		addambulance();
+		setAllMap(map,ambulancemarks);
+	}else{
+		setAllMap(null,ambulancemarks);
+		ambulancemarks = [];
+	}
+}
+
+function showinjured(flag) {
+	if(flag){
+		addinjured();
+		setAllMap(map,injuredmarks);
+	}else{
+		setAllMap(null,injuredmarks);
+		injuredmarks = [];
+	}
+}
+
+function showdisaster(flag) {
+	if(flag){
+		adddisaster();
+		setAllMap(map,disastermarks);
+	}else{
+		setAllMap(null,disastermarks);
+		disastermarks = [];
+	}
+}
+
+function setAllMap(map,markers) {
+  for (var mar in markers) {
+    markers[mar].setMap(map);
+  }
+}
+
+
+
+function enableshowambulance(flag) {
+    var t;
+	if(flag){
+		t = setInterval(function(){ showAmbulance(false);showAmbulance(true);},3000);
+	}else{
+		clearInterval(t);
+		showAmbulance(false);
+	}
+}
+
+function enableshowinjured(flag) {
+	var t;
+	if(flag){
+		t = setInterval(function(){ showinjured(false);showinjured(true);},3000);
+	}else{
+		clearInterval(t);
+		showinjured(false);
+	}
+}
+
+function enableshowdisaster(flag) {
+	var t;
+	if(flag){
+		t = setInterval(function(){ showdisaster(false);showdisaster(true);},3000);
+	}else{
+		clearInterval(t);
+		showdisaster(false);
+	}
+}
+
+</script>
+
+
+
+<script language='javascript'>
+
+function placeAmbulanceMarker(position, image, map, id, array) {
+	var marker = new google.maps.Marker({
+		position: position,
+		map: map,
+		icon: image
+	});
+	array[id]=marker;
+	//map.panTo(position);
+	//map.setZoom(15);
+
+
+	google.maps.event.addListener(marker, 'click', function() {
+		var response = httpGet('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id);
+		var json = JSON.parse(response);
+ 	
+		var text = "<html> <h1>"+id+"</h1> "+
+					"<body>"+
+						"<table style='width:100%' border = '1'>"+
+						  "<tr bgcolor='#CED8F6'><td>醫院編號</td><td>"+json['hospital']['ID']+"</td></tr>"+
+						  "<tr bgcolor='#81DAF5'><td>醫院名稱</td><td>"+json['hospital']['name']+"</td></tr>"+
+						  "<tr bgcolor='#CED8F6'><td>醫院地址</td><td>"+json['hospital']['address']+"</td></tr>"+
+						  "<tr bgcolor='#81DAF5'><td>醫院電話</td><td>"+json['hospital']['phone']+"</td></tr>"+
+						"</table>"+
+					"</body>"+
+					"<br>"+
+					"<body>"+
+						"<table style='width:100%' border = '1'>"+
+						  "<tr bgcolor='#CED8F6'><td>病人編號</td><td>"+json['injured']['InjuredPeopleID']+"</td></tr>";
+		
+		
+		response = httpGet('http://opends.azurewebsites.net/api/dynamic/ambulanceInfo.php?AmbID='+id);
+		json = JSON.parse(response);
+	
+		text = text+
+						  "<tr bgcolor='#81DAF5'><td>病人名稱</td><td>"+json['name']+"</td></tr>"+
+						  "<tr bgcolor='#CED8F6'><td>聯絡方式</td><td>"+json['Contact']+"</td></tr>"+
+						  "<tr bgcolor='#81DAF5'><td>病人電話</td><td>"+json['ContactPhone']+"</td></tr>"+
+						"</table>"+
+					"</body>"+
+				"</html>"
+		
+		var infowindow = new google.maps.InfoWindow({
+			content: text
+		});
+		infowindow.open(map,marker);
+	});
+}
+
+
+function addambulance() {
+
+	var response = httpGet('http://opends.azurewebsites.net/api/dynamic/ambulanceSync.php?Days=20');
+	var json = JSON.parse(response);
+	console.log(json);
+	for( item in json){
+
+		placeAmbulanceMarker(new google.maps.LatLng(json[item]['lat'], json[item]['lng']),'ambulance.png',map,json[item]['AmbID'],ambulancemarks);
+	}
+}
+
+
+
+function placeDisasterMarker(position, image, map, id, text, array) {
+	var marker = new google.maps.Marker({
+		position: position,
+		map: map,
+		icon: image
+	});
+	array[id]=marker;
+	google.maps.event.addListener(marker, 'click', function() {
+		var infowindow = new google.maps.InfoWindow({
+			content: text
+		});
+		infowindow.open(map,marker);
+	});
+
+}
+
+function adddisaster() {
+
+	var response = httpGet('http://opends.azurewebsites.net/api/dynamic/disaster.php');
+	var json = JSON.parse(response);
+	console.log(json);
+	for( item in json){
+	    var id = json[item]['DisID'];
+	    var text = "<html> <h1>"+id+"</h1> "+
+	                '<a href="javascript:void(0)" onclick="zoomIn()" id="menu1">'+
+                    '<a href="javascript:del_one_disaster(\''+id+'\',\''+disastermarks+'\')"><div class="context">  刪除災難點  </div></a>'+
+					"<body>"+
+						"<table style='width:100%' border = '1'>"+
+						  "<tr bgcolor='#CED8F6'><td>發生時間</td><td>"+json[item]['datetime']+"</td></tr>"+
+						  "<tr bgcolor='#81DAF5'><td>是否解除</td><td>"+json[item]['status']+"</td></tr>"+
+						"</table>"+
+					"</body>"+
+					"</html>";
+
+        console.log(json[item]['lat']+"  "+json[item]['lng']);
+		placeDisasterMarker(new google.maps.LatLng(json[item]['lat'], json[item]['lng']),'disaster.png',map,id,text,disastermarks);
+	}
+}
+
+
+function placeInjuredMarker(position, image, map, id, text, array) {
+	var marker = new google.maps.Marker({
+		position: position,
+		map: map,
+		icon: image
+	});
+	array[id]=marker;
+	//map.panTo(position);
+	//map.setZoom(15);
+	google.maps.event.addListener(marker, 'click', function() {
+		var infowindow = new google.maps.InfoWindow({
+			content: text
+		});
+		infowindow.open(map,marker);
+	});
+
+}
+
+function addinjured() {
+
+	var response = httpGet('http://opends.azurewebsites.net/api/dynamic/injured.php');
+
+    showinjured(false);
+
+	var json = JSON.parse(response);
+	for( item in json){
+	    var id = json[item]['InjID'];
+		var text = "<html> <html> <h1>"+id+"</h1> "+
+		            '<a href="javascript:void(0)" onclick="zoomIn()" id="menu1">'+
+                    '<a href="javascript:del_one_injured(\''+id+'\',\''+injuredmarks+'\')"><div class="context">  刪除病患  </div></a>'+
+					"<body>"+
+						"<table style='width:100%' border = '1'>"+
+						  "<tr bgcolor='#CED8F6'><td>傷患名稱</td><td>"+json[item]['IName']+"</td></tr>"+
+						  "<tr bgcolor='#81DAF5'><td>性別</td><td>"+json[item]['sex']+"</td></tr>"+
+						  "<tr bgcolor='#CED8F6'><td>聯絡方式</td><td>"+json[item]['Contact']+"</td></tr>"+
+						  "<tr bgcolor='#81DAF5'><td>狀態</td><td>"+json[item]['status']+"</td></tr>"+
+						"</table>"+
+					"</body>"+
+					"</html>";
+		placeInjuredMarker(new google.maps.LatLng(json[item]['lat'], json[item]['lng']),'injured.png',map,id,text, injuredmarks);
+	}
+}
+
+</script>
+
+
+<script language='javascript'>
+
+function httpGet(theUrl)
+{
+    var xmlHttp = null;
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+function httpPost(theUrl) {
+    var xmlHttp = null;
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST",theUrl,true);
+    xmlHttp.send();
+}
+
+
+
+</script>
+
+
+<script language='javascript'>
+    function getCanvasXY(caurrentLatLng){
+        var scale = Math.pow(2, map.getZoom());
+        var nw = new google.maps.LatLng(
+         map.getBounds().getNorthEast().lat(),
+         map.getBounds().getSouthWest().lng()
+         );
+         var worldCoordinateNW = map.getProjection().fromLatLngToPoint(nw);
+         var worldCoordinate = map.getProjection().fromLatLngToPoint(caurrentLatLng);
+         var caurrentLatLngOffset = new google.maps.Point(
+             Math.floor((worldCoordinate.x - worldCoordinateNW.x) * scale),
+             Math.floor((worldCoordinate.y - worldCoordinateNW.y) * scale)
+         );
+         return caurrentLatLngOffset;
+    }
+    function setMenuXY(caurrentLatLng){
+        var mapWidth = $('#map-canvas').width();
+        var mapHeight = $('#map-canvas').height();
+        var menuWidth = $('.contextmenu').width();
+        var menuHeight = $('.contextmenu').height();
+        var clickedPosition = getCanvasXY(caurrentLatLng);
+        var x = clickedPosition.x ;
+        var y = clickedPosition.y ;
+
+        var e = window.event;
+
+        var posX = e.clientX-menuWidth;
+        var posY = e.clientY-menuHeight;
+
+         if((mapWidth - x ) < menuWidth)
+             x = x - menuWidth;
+        if((mapHeight - y ) < menuHeight)
+            y = y - menuHeight;
+
+        $('.contextmenu').css('left',posX  );
+        $('.contextmenu').css('top',posY );
+    };
+
+    function showContextMenu(caurrentLatLng) {
+        contextmenu.innerHTML =
+             '<a href="javascript:close()"><div align="right">  關閉  </div></a>'+
+             '<a href="javascript:add_one_injured(\''+caurrentLatLng.lat()+'\',\''+caurrentLatLng.lng()+'\')"><div class="context">  建立病患  </div></a>'+
+             '<a href="javascript:add_one_disaster(\''+caurrentLatLng.lat()+'\',\''+caurrentLatLng.lng()+'\')"><div class="context">  建立災害點  </div></a>';
+        $(map.getDiv()).append(contextmenu);
+        setMenuXY(caurrentLatLng);
+        contextmenu.style.visibility = "visible";
+   }
+
+
+   function add_one_injured(lat,lng) {
+        console.log('http://opends.azurewebsites.net/api/dynamic/InjuredInit.php?Type=Per&PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
+        httpPost('http://opends.azurewebsites.net/api/dynamic/InjuredInit.php?Type=Per&PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
+        contextmenu.style.visibility="hidden";
+   }
+
+   function del_one_injured(id,array) {
+        console.log('http://opends.azurewebsites.net/api/dynamic/InjuredCancel.php?injID='+id);
+        httpPost('http://opends.azurewebsites.net/api/dynamic/InjuredCancel.php?injID='+id);
+        delete(array[id]);
+        contextmenu.style.visibility="hidden";
+   }
+
+    function add_one_disaster(lat,lng) {
+        console.log('http://opends.azurewebsites.net/api/dynamic/DisasterInit.php?PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
+        httpPost('http://opends.azurewebsites.net/api/dynamic/DisasterInit.php?PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
+        contextmenu.style.visibility="hidden";
+   }
+
+   function del_one_disaster(id,array) {
+        console.log('http://opends.azurewebsites.net/api/dynamic/DisasterCancel.php?DisID='+id);
+        httpPost('http://opends.azurewebsites.net/api/dynamic/DisasterCancel.php?DisID='+id);
+        delete(array[id]);
+        contextmenu.style.visibility="hidden";
+   }
+
+   function close() {
+        contextmenu.style.visibility="hidden";
+   }
+
+
+
+</script>
+
+</head>
+<body>
+<div id="wrap">
+    <div id="sideColumn">
+        <div id="panel">
+            <input type="button" value="test1" onclick="enableshowdisaster(true)">
+        </div>
+        <div id="pane2">
+            <input type="button" value="test2" onclick="enableshowambulance(true)">
+        </div>
+    </div>
+</div>
+<br>
+<div id="map-canvas"></div>
+</body>
+</html>
