@@ -2,11 +2,25 @@
 <items version="2" >
 
     <item
+        jar="/home/whcheng/AndroidStudioProjects/AndroidDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="686344a780033e4ba22b926cd225f8d4941247e6">
+        <dex dex="/home/whcheng/AndroidStudioProjects/AndroidDemo/app/build/intermediates/pre-dexed/debug/classes-562b2da815619a8f82ffaa632c2abcca11e480fa.jar" />
+    </item>
+    <item
         jar="/home/whcheng/AndroidStudioProjects/Demo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
         <dex dex="/home/whcheng/AndroidStudioProjects/Demo/app/build/intermediates/pre-dexed/debug/classes-fb01769837f91cba176519c8607c9c46e463c995.jar" />
+    </item>
+    <item
+        jar="/home/whcheng/AndroidStudioProjects/AndroidDemo/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0/libs/internal_impl-21.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="1609e6d42d0480b0f4188e2c29f75388fa12a8f0">
+        <dex dex="/home/whcheng/AndroidStudioProjects/AndroidDemo/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.0-0973e4146aa1a509b52b0cf3bea19e0e3208339c.jar" />
     </item>
     <item
         jar="/home/whcheng/AndroidStudioProjects/Demo/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
@@ -23,11 +37,25 @@
         <dex dex="/home/whcheng/AndroidStudioProjects/Demo/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.0-96bff81a6c3fced428099c81be6d114cfeeef937.jar" />
     </item>
     <item
+        jar="/home/whcheng/AndroidStudioProjects/AndroidDemo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
+        <dex dex="/home/whcheng/AndroidStudioProjects/AndroidDemo/app/build/intermediates/pre-dexed/debug/classes-38628aa36b2b371f01a73c7dc8d1bf9b31d4d9ad.jar" />
+    </item>
+    <item
         jar="/home/whcheng/AndroidStudioProjects/Demo/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0/classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="686344a780033e4ba22b926cd225f8d4941247e6">
         <dex dex="/home/whcheng/AndroidStudioProjects/Demo/app/build/intermediates/pre-dexed/debug/classes-8aeee9f72505d48cb8c5f701daea16be89e5c5f3.jar" />
+    </item>
+    <item
+        jar="/home/whcheng/AndroidStudioProjects/AndroidDemo/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="/home/whcheng/AndroidStudioProjects/AndroidDemo/app/build/intermediates/pre-dexed/debug/classes-20e30624743155ea283edfc277e0360e8e2039ee.jar" />
     </item>
     <item
         jar="/home/whcheng/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.0/support-annotations-21.0.0.jar"

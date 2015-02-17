@@ -84,10 +84,10 @@ public class MainActivity extends Activity implements LocationListener{
             @Override
             public void onClick(View v) {
             if(!show_injured){
-                webview.loadUrl("javascript:enableshowinjured(true)");
+                webview.loadUrl("javascript:showinjured(true)");
                 show_injured = true;
             }else{
-                webview.loadUrl("javascript:enableshowinjured(false)");
+                webview.loadUrl("javascript:showinjured(false)");
                 show_injured = false;
             }
 
@@ -99,10 +99,10 @@ public class MainActivity extends Activity implements LocationListener{
             @Override
             public void onClick(View v) {
                 if(!show_ambulance){
-                    webview.loadUrl("javascript:enableshowambulance(true)");
+                    webview.loadUrl("javascript:showambulance(true)");
                     show_ambulance = true;
                 }else{
-                    webview.loadUrl("javascript:enableshowambulance(false)");
+                    webview.loadUrl("javascript:showambulance(false)");
                     show_ambulance = false;
                 }
 
@@ -114,10 +114,10 @@ public class MainActivity extends Activity implements LocationListener{
             @Override
             public void onClick(View v) {
                 if(!show_disaster){
-                    webview.loadUrl("javascript:enableshowdisaster(true)");
+                    webview.loadUrl("javascript:showdisaster(true)");
                     show_disaster = true;
                 }else{
-                    webview.loadUrl("javascript:enableshowdisaster(false)");
+                    webview.loadUrl("javascript:showdisaster(false)");
                     show_disaster = false;
                 }
 
