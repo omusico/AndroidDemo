@@ -1,9 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    >
+    android:layout_gravity="center">
 
     <WebView android:id="@+id/webview"
         android:layout_width="fill_parent"
@@ -56,4 +54,4 @@
         android:layout_alignStart="@+id/btn_disaster" />
 
 
-</RelativeLayout><!-- From: file:/home/whcheng/AndroidStudioProjects/Demo/app/src/main/res/layout/activity_main2.xml -->
+</RelativeLayout><!-- From: file:/home/whcheng/AndroidStudioProjects/AndroidDemo/app/src/main/res/layout/activity_main2.xml -->

@@ -24,6 +24,14 @@
         padding-left: 5px
         }
 
+        .boldtable, .boldtable TD, .boldtable TH
+        {
+        font-family:sans-serif;
+        font-size:20pt;
+        color:white;
+        background-color:navy;
+        }
+
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
@@ -101,33 +109,46 @@ function setAllMap(map,markers) {
 }
 
 
+var enableshowambulance;
+var enableshowinjured;
+var enableshowdisaster;
+
+function updateambulance(){
+    showAmbulance(false);showAmbulance(true);
+}
+
+function updateinjured(){
+    showinjured(false);showinjured(true);
+}
+
+function updatedisaster(){
+    showdisaster(false);showdisaster(true);
+}
+
 
 function enableshowambulance(flag) {
-    var t;
 	if(flag){
-		t = setInterval(function(){ showAmbulance(false);showAmbulance(true);},3000);
+		enableshowambulance = setInterval(function(){ showAmbulance(false);showAmbulance(true);},60000);
 	}else{
-		clearInterval(t);
+		clearInterval(enableshowambulance);
 		showAmbulance(false);
 	}
 }
 
 function enableshowinjured(flag) {
-	var t;
 	if(flag){
-		t = setInterval(function(){ showinjured(false);showinjured(true);},3000);
+		enableshowinjured = setInterval(function(){ showinjured(false);showinjured(true);},60000);
 	}else{
-		clearInterval(t);
+		clearInterval(enableshowinjured);
 		showinjured(false);
 	}
 }
 
 function enableshowdisaster(flag) {
-	var t;
 	if(flag){
-		t = setInterval(function(){ showdisaster(false);showdisaster(true);},3000);
+		enableshowdisaster = setInterval(function(){ showdisaster(false);showdisaster(true);},60000);
 	}else{
-		clearInterval(t);
+		clearInterval(enableshowdisaster);
 		showdisaster(false);
 	}
 }
@@ -165,16 +186,11 @@ function placeAmbulanceMarker(position, image, map, id, array) {
 					"<br>"+
 					"<body>"+
 						"<table style='width:100%' border = '1'>"+
-						  "<tr bgcolor='#CED8F6'><td>病人編號</td><td>"+json['injured']['InjuredPeopleID']+"</td></tr>";
-		
-		
-		response = httpGet('http://opends.azurewebsites.net/api/dynamic/ambulanceInfo.php?AmbID='+id);
-		json = JSON.parse(response);
-	
-		text = text+
-						  "<tr bgcolor='#81DAF5'><td>病人名稱</td><td>"+json['name']+"</td></tr>"+
-						  "<tr bgcolor='#CED8F6'><td>聯絡方式</td><td>"+json['Contact']+"</td></tr>"+
-						  "<tr bgcolor='#81DAF5'><td>病人電話</td><td>"+json['ContactPhone']+"</td></tr>"+
+						  "<tr bgcolor='#CED8F6'><td>病人編號</td><td>"+json['injured']['InjuredPeopleID']+"</td></tr>"+
+						  "<tr bgcolor='#81DAF5'><td>病人名稱</td><td>"+json['injured']['Name']+"</td><td><button onclick='editinjuredname(\""+id+"\")'>修改</button></td></tr>"+
+						  "<tr bgcolor='#CED8F6'><td>病人電話</td><td>"+json['injured']['phone']+"</td><td><button onclick='editinjuredphone(\""+id+"\")'>修改</button></td></tr>"+
+						  "<tr bgcolor='#81DAF5'><td>聯絡者</td><td>"+json['injured']['Contact']+"</td><td><button onclick='editinjuredcontact(\""+id+"\")'>修改</button></td></tr>"+
+						  "<tr bgcolor='#CED8F6'><td>聯絡者電話</td><td>"+json['injured']['ContactPhone']+"</td><td><button onclick='editinjuredcontactphone(\""+id+"\")'>修改</button></td></tr>"+
 						"</table>"+
 					"</body>"+
 				"</html>"
@@ -184,6 +200,51 @@ function placeAmbulanceMarker(position, image, map, id, array) {
 		});
 		infowindow.open(map,marker);
 	});
+}
+
+
+
+function editinjuredname(id){
+    var person = prompt("請輸入病患的名字", "Name");
+
+    if (person != null) {
+        httpPost('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Injured_Name='+person);
+        contextmenu.style.visibility="hidden";
+        updateambulance();
+    }
+}
+
+
+function editinjuredphone(id){
+    var person = prompt("請輸入病患的電話", "Phone");
+
+    if (person != null) {
+        httpPost('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Injured_Phone='+person);
+        contextmenu.style.visibility="hidden";
+        updateambulance();
+    }
+}
+
+
+function editinjuredcontact(id){
+    var person = prompt("請輸入病患連絡者", "Name");
+
+    if (person != null) {
+        httpPost('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Contact_Name='+person);
+        contextmenu.style.visibility="hidden";
+        updateambulance();
+    }
+}
+
+
+function editinjuredcontactphone(id){
+    var person = prompt("請輸入病患聯絡者的電話", "Phone");
+
+    if (person != null) {
+        httpPost('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Contact_Phone='+person);
+        contextmenu.style.visibility="hidden";
+        updateambulance();
+    }
 }
 
 
@@ -302,6 +363,7 @@ function httpPost(theUrl) {
     xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST",theUrl,true);
     xmlHttp.send();
+    console.log(theUrl);
 }
 
 
@@ -394,17 +456,6 @@ function httpPost(theUrl) {
 
 </head>
 <body>
-<div id="wrap">
-    <div id="sideColumn">
-        <div id="panel">
-            <input type="button" value="test1" onclick="enableshowdisaster(true)">
-        </div>
-        <div id="pane2">
-            <input type="button" value="test2" onclick="enableshowambulance(true)">
-        </div>
-    </div>
-</div>
-<br>
 <div id="map-canvas"></div>
 </body>
 </html>
