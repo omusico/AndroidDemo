@@ -27,7 +27,7 @@
         .boldtable, .boldtable TD, .boldtable TH
         {
         font-family:sans-serif;
-        font-size:20pt;
+        font-size:12pt;
         color:white;
         background-color:navy;
         }
@@ -71,8 +71,7 @@ function initialize() {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-function showAmbulance(flag) {
-    console.log(flag);
+function showambulance(flag) {
 	if(flag){
 		addambulance();
 		setAllMap(map,ambulancemarks);
@@ -114,7 +113,7 @@ var enableshowinjured;
 var enableshowdisaster;
 
 function updateambulance(){
-    showAmbulance(false);showAmbulance(true);
+    showambulance(false);showambulance(true);
 }
 
 function updateinjured(){
@@ -128,10 +127,10 @@ function updatedisaster(){
 
 function enableshowambulance(flag) {
 	if(flag){
-		enableshowambulance = setInterval(function(){ showAmbulance(false);showAmbulance(true);},60000);
+		enableshowambulance = setInterval(function(){ showambulance(false);showambulance(true);},60000);
 	}else{
 		clearInterval(enableshowambulance);
-		showAmbulance(false);
+		showambulance(false);
 	}
 }
 
@@ -174,9 +173,9 @@ function placeAmbulanceMarker(position, image, map, id, array) {
 		var response = httpGet('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id);
 		var json = JSON.parse(response);
  	
-		var text = "<html> <h1>"+id+"</h1> "+
+		var text = "<html> "+id+""+
 					"<body>"+
-						"<table style='width:100%' border = '1'>"+
+						"<table style='width:100%' border = '1' >"+
 						  "<tr bgcolor='#CED8F6'><td>醫院編號</td><td>"+json['hospital']['ID']+"</td></tr>"+
 						  "<tr bgcolor='#81DAF5'><td>醫院名稱</td><td>"+json['hospital']['name']+"</td></tr>"+
 						  "<tr bgcolor='#CED8F6'><td>醫院地址</td><td>"+json['hospital']['address']+"</td></tr>"+
@@ -186,7 +185,7 @@ function placeAmbulanceMarker(position, image, map, id, array) {
 					"<br>"+
 					"<body>"+
 						"<table style='width:100%' border = '1'>"+
-						  "<tr bgcolor='#CED8F6'><td>病人編號</td><td>"+json['injured']['InjuredPeopleID']+"</td></tr>"+
+						  "<tr bgcolor='#CED8F6'><td width=80>病人編號</td><td>"+json['injured']['InjuredPeopleID']+"</td></tr>"+
 						  "<tr bgcolor='#81DAF5'><td>病人名稱</td><td>"+json['injured']['Name']+"</td><td><button onclick='editinjuredname(\""+id+"\")'>修改</button></td></tr>"+
 						  "<tr bgcolor='#CED8F6'><td>病人電話</td><td>"+json['injured']['phone']+"</td><td><button onclick='editinjuredphone(\""+id+"\")'>修改</button></td></tr>"+
 						  "<tr bgcolor='#81DAF5'><td>聯絡者</td><td>"+json['injured']['Contact']+"</td><td><button onclick='editinjuredcontact(\""+id+"\")'>修改</button></td></tr>"+
@@ -196,7 +195,8 @@ function placeAmbulanceMarker(position, image, map, id, array) {
 				"</html>"
 		
 		var infowindow = new google.maps.InfoWindow({
-			content: text
+			content: text,
+			maxWidth: 480
 		});
 		infowindow.open(map,marker);
 	});
