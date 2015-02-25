@@ -183,7 +183,7 @@ function placeAmbulanceMarker(position, image, map, id, array) {
 
 
 	google.maps.event.addListener(marker, 'click', function() {
-		var response = httpGet('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id);
+		var response = httpGet('http://opends2.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id);
 		var json = JSON.parse(response);
  	
 		var text = "<html> "+id+""+
@@ -221,7 +221,7 @@ function editinjuredname(id){
     var person = prompt("請輸入病患的名字", "Name");
 
     if (person != null) {
-        httpPost('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Injured_Name='+person);
+        httpPost('http://opends2.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Injured_Name='+person);
         contextmenu.style.visibility="hidden";
         updateambulance();
     }
@@ -232,7 +232,7 @@ function editinjuredphone(id){
     var person = prompt("請輸入病患的電話", "Phone");
 
     if (person != null) {
-        httpPost('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Injured_Phone='+person);
+        httpPost('http://opends2.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Injured_Phone='+person);
         contextmenu.style.visibility="hidden";
         updateambulance();
     }
@@ -243,7 +243,7 @@ function editinjuredcontact(id){
     var person = prompt("請輸入病患連絡者", "Name");
 
     if (person != null) {
-        httpPost('http://opends.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Contact_Name='+person);
+        httpPost('http://opends2.azurewebsites.net/api/dynamic/ambulanceTask.php?AmbID='+id+'&Contact_Name='+person);
         contextmenu.style.visibility="hidden";
         updateambulance();
     }
@@ -263,7 +263,7 @@ function editinjuredcontactphone(id){
 
 function addambulance() {
 
-	var response = httpGet('http://opends.azurewebsites.net/api/dynamic/ambulanceSync.php?Days=20');
+	var response = httpGet('http://opends2.azurewebsites.net/api/dynamic/ambulanceSync.php?Days=20');
 	var json = JSON.parse(response);
 	console.log(json);
 	for( item in json){
@@ -292,7 +292,7 @@ function placeDisasterMarker(position, image, map, id, text, array) {
 
 function adddisaster() {
 
-	var response = httpGet('http://opends.azurewebsites.net/api/dynamic/disaster.php');
+	var response = httpGet('http://opends2.azurewebsites.net/api/dynamic/disaster.php');
 	var json = JSON.parse(response);
 	console.log(json);
 	for( item in json){
