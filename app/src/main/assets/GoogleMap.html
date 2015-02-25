@@ -1,41 +1,41 @@
 <html>
 <head>
-    <title>Simple Map</title>
-    <meta name="viewport" conpatient="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <style>
-        html, body, #map-canvas {
-        height: 100%;
-        margin: 0px;
-        padding: 0px
-        }
-        #wrap {width:900px;margin:0 auto;overflow:hidden;}
-        #sideColumn {width:300px;float:left;}
-        #mainColumn {float:left;width:600px;}
-        .contextmenu{
-        visibility:hidden;
-        background:#ffffff;
-        border:1px solid #8888FF;
-        z-index: 10;
-        position: relative;
-        width: 140px;
-        }
-        .contextmenu div{
-        padding-left: 5px
-        }
+<title>Simple Map</title>
+<meta name="viewport" conpatient="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<style>
+    html, body, #map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px
+    }
+    #wrap {width:900px;margin:0 auto;overflow:hidden;}
+    #sideColumn {width:300px;float:left;}
+    #mainColumn {float:left;width:600px;}
+    .contextmenu{
+    visibility:hidden;
+    background:#ffffff;
+    border:1px solid #8888FF;
+    z-index: 10;
+    position: relative;
+    width: 140px;
+    }
+    .contextmenu div{
+    padding-left: 5px
+    }
 
-        .boldtable, .boldtable TD, .boldtable TH
-        {
-        font-family:sans-serif;
-        font-size:12pt;
-        color:white;
-        background-color:navy;
-        }
+    .boldtable, .boldtable TD, .boldtable TH
+    {
+    font-family:sans-serif;
+    font-size:12pt;
+    color:white;
+    background-color:navy;
+    }
 
-    </style>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
-    <script>
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<script>
 
 var geocoder;
 var map;
@@ -334,7 +334,7 @@ function placeInjuredMarker(position, image, map, id, text, array) {
 
 function addinjured() {
 
-	var response = httpGet('http://opends.azurewebsites.net/api/dynamic/injured.php');
+	var response = httpGet('http://opends2.azurewebsites.net/api/dynamic/injured.php');
 
     showinjured(false);
 
@@ -434,27 +434,27 @@ function httpPost(theUrl) {
 
 
    function add_one_injured(lat,lng) {
-        console.log('http://opends.azurewebsites.net/api/dynamic/InjuredInit.php?Type=Per&PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
-        httpPost('http://opends.azurewebsites.net/api/dynamic/InjuredInit.php?Type=Per&PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
+        console.log('http://opends2.azurewebsites.net/api/dynamic/InjuredInit.php?Type=Per&PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
+        httpPost('http://opends2.azurewebsites.net/api/dynamic/InjuredInit.php?Type=Per&PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
         contextmenu.style.visibility="hidden";
    }
 
    function del_one_injured(id,array) {
-        console.log('http://opends.azurewebsites.net/api/dynamic/InjuredCancel.php?injID='+id);
-        httpPost('http://opends.azurewebsites.net/api/dynamic/InjuredCancel.php?injID='+id);
+        console.log('http://opends2.azurewebsites.net/api/dynamic/InjuredCancel.php?injID='+id);
+        httpPost('http://opends2.azurewebsites.net/api/dynamic/InjuredCancel.php?injID='+id);
         delete(array[id]);
         contextmenu.style.visibility="hidden";
    }
 
     function add_one_disaster(lat,lng) {
-        console.log('http://opends.azurewebsites.net/api/dynamic/DisasterInit.php?PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
-        httpPost('http://opends.azurewebsites.net/api/dynamic/DisasterInit.php?PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
+        console.log('http://opends2.azurewebsites.net/api/dynamic/DisasterInit.php?PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
+        httpPost('http://opends2.azurewebsites.net/api/dynamic/DisasterInit.php?PerID=36&IP=123.240.157.100:54747&lat='+lat+'&lng='+lng);
         contextmenu.style.visibility="hidden";
    }
 
    function del_one_disaster(id,array) {
-        console.log('http://opends.azurewebsites.net/api/dynamic/DisasterCancel.php?DisID='+id);
-        httpPost('http://opends.azurewebsites.net/api/dynamic/DisasterCancel.php?DisID='+id);
+        console.log('http://opends2.azurewebsites.net/api/dynamic/DisasterCancel.php?DisID='+id);
+        httpPost('http://opends2.azurewebsites.net/api/dynamic/DisasterCancel.php?DisID='+id);
         delete(array[id]);
         contextmenu.style.visibility="hidden";
    }
