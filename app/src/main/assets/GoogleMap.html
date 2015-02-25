@@ -69,6 +69,19 @@ function initialize() {
    contextmenu.className = 'contextmenu';
 }
 
+function goto(address){
+   geocoder.geocode({'address': address },function(results, status){
+     if(status == google.maps.GeocoderStatus.OK){
+       map.setCenter(results[0].geometry.location);
+       var marker =new google.maps.Marker({
+         map: map,
+         position: results[0].geometry.location
+       });
+       }
+     });
+   }
+
+
 google.maps.event.addDomListener(window, 'load', initialize);
 
 function showambulance(flag) {
@@ -165,8 +178,8 @@ function placeAmbulanceMarker(position, image, map, id, array) {
 		icon: image
 	});
 	array[id]=marker;
-	//map.panTo(position);
-	//map.setZoom(15);
+	map.panTo(position);
+	map.setZoom(15);
 
 
 	google.maps.event.addListener(marker, 'click', function() {
@@ -308,8 +321,8 @@ function placeInjuredMarker(position, image, map, id, text, array) {
 		icon: image
 	});
 	array[id]=marker;
-	//map.panTo(position);
-	//map.setZoom(15);
+	map.panTo(position);
+	map.setZoom(15);
 	google.maps.event.addListener(marker, 'click', function() {
 		var infowindow = new google.maps.InfoWindow({
 			content: text
